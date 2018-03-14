@@ -17,6 +17,7 @@ app.use(require('SP'))
 
 And dont forget to add to your configuration the Identity provider host:  
 ```json
+// config/default.json or any other configuraiton you will use
 {
 	"idp": "http://your-idp-host:port"
 }
