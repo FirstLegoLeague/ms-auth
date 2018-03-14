@@ -1,6 +1,6 @@
 # SP
 
-Service Provider library using jwt
+Service Provider library for the [Identity Provider service](https://github.com/FirstLegoLeagueIL/IdP)
 
 ## Usage
 
@@ -24,3 +24,18 @@ And dont forget to add to your configuration the Identity provider host:
 ```
 
 If your service runs with the *launcher*, the launcher will provide it in the configuration parameter givven to your application.
+
+## Development
+1. Fork this repository
+2. make some changes
+3. create a Pull Request
+4. Wait for a CR from the code owner
+5. make sure everything is well
+6. merge
+
+A few things to notice while developing:
+* Use `yarn` not `npm`
+* Follow javascript conventions as described [here](http://nodeguide.com/style.html)
+* Keep the package lightweight and easy to use
+* Don't break API if not neccessary
+* Be creative and have fun
