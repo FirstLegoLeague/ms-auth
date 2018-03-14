@@ -1,5 +1,5 @@
 {
-  "name": "SP",
+  "name": "@first-lego-league/SP",
   "version": "1.0.0",
   "description": "Service Provider using JWT",
   "main": "index.js",
