@@ -17,7 +17,7 @@ router.use((req, res, next) => {
   } else if(req.cookie['user'] && jwt.verify(req.cookie['user'], secret)) {
     next();
   } else {
-    res.redirect(`${identityProviderUrl}/login?issuer=${req.host}/consume_token`);
+    res.redirect(`${identityProviderUrl}/login?callback_url=${req.host}/consume_token`);
   }
 });
 
@@ -27,7 +27,7 @@ router.get('/consume_token', (req, res, next) => {
     res.cookie('user', token, { maxAge: 24 * 60 * 60 * 1000 /* day */ });
     res.redirect('/');
   } else {
-    res.redirect(`${identityProviderUrl}/login?issuer=${req.host}/consume_token`);
+    res.redirect(`${identityProviderUrl}/login?callback_url=${req.host}/consume_token`);
   }
 });
 
