@@ -2,11 +2,12 @@ const DEFAULT_SECRET = '321LEGO';
 const DEFAULT_TOKEN_EXPIRATION = 24 * 60 * 60 * 1000; // day
 const DEFAULT_HOME_ROUTE = '/';
 const COOKIE_KEY = 'user';
+const HEADER_KEY = 'auth-token'; // Following the FIRST LEGO League System module standard v1.0
 
-var express = require('express'),
-var cookieParser = require('cookie-parser'),
-var jwt = require('jsonwebtoken'),
-var config = require('config'),
+var express = require('express');
+var cookieParser = require('cookie-parser');
+var jwt = require('jsonwebtoken');
+var config = require('config');
 var router = express.Router();
 
 var identityProviderUrl = config.get('idp');
@@ -29,11 +30,18 @@ router.use((req, res, next) => {
 });
 
 router.use((req, res, next) => {
-  if(publicRoutes.includes(req.url) || (req.cookie[COOKIE_KEY] && jwt.verify(req.cookie[COOKIE_KEY], secret))) {
-  	next();
-  } else {
-    res.redirectToIdP();
+  if(publicRoutes.includes(req.url)) {
+    next();
+    return;
   }
+
+  var existingAuthToken = req.get(HEADER_KEY) || req.cookies[COOKIE_KEY];
+  if(existingAuthToken && jwt.verify(existingAuthToken, secret)) {
+  	next();
+    return;
+  }
+  
+  res.redirectToIdP();
 });
 
 router.get('/consume_token', (req, res, next) => {
