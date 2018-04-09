@@ -35,7 +35,7 @@ If your service runs with the *launcher*, the launcher will provide it in the co
 
 A few things to notice while developing:
 * Use `yarn` not `npm`
-* Follow javascript conventions as described [here](http://nodeguide.com/style.html)
+* Follow javascript standard as described [here](https://standardjs.com/)
 * Keep the package lightweight and easy to use
 * Don't break API if not neccessary
 * Be creative and have fun
