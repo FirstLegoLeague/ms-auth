@@ -1,5 +1,6 @@
 'use strict'
 
-const authRouter = require('./lib/authentication_router')
+const authRouter = require('./lib/authentication_router').router
 
-exports.router = authRouter.router
+// eslint-disable-next-line node/exports-style
+module.exports = authRouter.router
