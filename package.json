@@ -7,7 +7,7 @@
   "author": "Idan Stark <idanstark42@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@first-lego-league/ms-logger": "^1.0.1",
+    "@first-lego-league/ms-logger": "^1.2.0",
     "config": "^1.30.0",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
@@ -19,5 +19,8 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1"
+  },
+  "peerDependencies": {
+    "@first-lego-league/ms-correlation": "^0.0.1"
   }
 }
