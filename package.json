@@ -1,6 +1,6 @@
 {
   "name": "@first-lego-league/ms-authentication",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Service Provider using JWT",
   "main": "index.js",
   "repository": "https://github.com/FirstLegoLeagueIL/SP.git",
@@ -8,7 +8,6 @@
   "license": "MIT",
   "dependencies": {
     "@first-lego-league/ms-logger": "^1.2.0",
-    "config": "^1.30.0",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.2.0"
