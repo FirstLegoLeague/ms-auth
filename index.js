@@ -1,6 +1,4 @@
 'use strict'
 
-const authRouter = require('./lib/authentication_router').router
-
-module.authenticationMiddleware = authRouter.router
-module.authenticationDevMiddleware = devRouter.router
+exports.authenticationMiddleware = require('./lib/authentication_router').router
+exports.authenticationDevMiddleware = require('./lib/dev_router').router
