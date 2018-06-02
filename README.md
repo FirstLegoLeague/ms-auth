@@ -12,7 +12,11 @@ Or use yarn (prefered):
 
 After the installation, you just need import it and add it to use it as a router. everything route that fits this router will be protected by the IdP:  
 ```javascript
-app.use(require('ms-authentication'))
+app.use(require('@first-lego-league/ms-authentication').authenticationMiddleware)
+```
+And for dev servers (Faking an authentication cookie):
+```javascript
+app.use(require('@first-lego-league/ms-authentication').authenticationDevMiddleware)
 ```
 
 ## Development
