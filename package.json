@@ -1,5 +1,5 @@
 {
-  "name": "@first-lego-league/ms-authentication",
+  "name": "@first-lego-league/ms-auth",
   "version": "1.0.7",
   "description": "Service Provider using JWT",
   "main": "index.js",
