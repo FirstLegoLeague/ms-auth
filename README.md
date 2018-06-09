@@ -1,6 +1,6 @@
 # MS-Authentication
 
-Authentication library using the Identity Provider module based on the MS (Module Standard)
+Authentication and Authorization library using the Identity Provider module based on the MS (Module Standard)
 
 ## Usage
 
@@ -12,11 +12,15 @@ Or use yarn (prefered):
 
 After the installation, you just need import it and add it to use it as a router. everything route that fits this router will be protected by the IdP:  
 ```javascript
-app.use(require('@first-lego-league/ms-authentication').authenticationMiddleware)
+app.use(require('@first-lego-league/ms-auth').authenticationMiddleware)
 ```
 And for dev servers (Faking an authentication cookie):
 ```javascript
-app.use(require('@first-lego-league/ms-authentication').authenticationDevMiddleware)
+app.use(require('@first-lego-league/ms-auth').authenticationDevMiddleware)
+```
+For authorization of some users, you can use:
+```javascript
+app.use(require('@first-lego-league/ms-auth').authorizationMiddleware(arrayOfAuthorizedUsers))
 ```
 
 ## Development
