@@ -28,9 +28,7 @@ rules:
     - parent
     newlines-between: always-and-inside-groups
 
-  node/exports-style:
-  - warn
-  - exports
+  node/exports-style: [ warn, exports ]
   node/no-unsupported-features: warn
   node/shebang: warn
 

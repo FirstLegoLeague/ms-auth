@@ -3,23 +3,27 @@
   "version": "1.2.1",
   "description": "Service Provider using JWT",
   "main": "index.js",
-  "repository": "https://github.com/FirstLegoLeagueIL/SP.git",
+  "repository": "https://github.com/FirstLegoLeague/ms-auth.git",
   "author": "Idan Stark <idanstark42@gmail.com>",
   "license": "MIT",
+  "engines": {
+    "node": ">=8.2.1"
+  },
   "dependencies": {
-    "@first-lego-league/ms-logger": "^1.2.0",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.2.0"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.10.0",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1"
   },
   "peerDependencies": {
-    "@first-lego-league/ms-correlation": "^0.0.1"
+    "@first-lego-league/ms-correlation": "^0.0.1",
+    "@first-lego-league/ms-logger": "^1.2.0"
   }
 }
