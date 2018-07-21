@@ -1,6 +1,6 @@
 {
   "name": "@first-lego-league/ms-auth",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Service Provider using JWT",
   "main": "index.js",
   "repository": "https://github.com/FirstLegoLeague/ms-auth.git",
