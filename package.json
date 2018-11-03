@@ -10,7 +10,7 @@
     "node": ">=8.2.1"
   },
   "scripts": {
-    "test": "env SECRET=mock_secret MODULE_IDENTITY_PROVIDER_URL=mock_idp PORT=0000 mocha"
+    "test": "env SECRET=mock_secret MODULE_IDENTITY_PROVIDER_URL=mock_idp PORT=0000 nyc --all --reporter=text --check-coverage --lines 90 mocha"
   },
   "dependencies": {
     "@first-lego-league/ms-correlation": "^0.0.5",
@@ -29,7 +29,8 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0"
   },
   "peerDependencies": {}
 }
