@@ -6,11 +6,11 @@ const spies = require('chai-spies')
 chai.use(spies)
 
 const LoggerMock = {
-  debug: message => console.log(message, 'debug'),
-  info: message => console.log(message, 'info'),
-  warn: message => console.log(message, 'warn'),
-  error: message => console.log(message, 'error'),
-  fatal: message => console.log(message, 'fatal')
+  debug: () => { },
+  info: () => { },
+  warn: () => { },
+  error: () => { },
+  fatal: () => { }
 }
 
 const loggerSandbox = chai.spy.sandbox()
