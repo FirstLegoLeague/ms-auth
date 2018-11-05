@@ -52,6 +52,12 @@ describe('Authentication Router', () => {
         .expect(REDIRECTION_STATUS, correctlyRedirectsToIdPAssertion('info', 'Redirecting to Identity Provider: No auth token found.'))
     })
 
+    it('correctly even without a slash in the end of the route', () => {
+      request(app)
+        .get('/not-slash')
+        .expect(REDIRECTION_STATUS, correctlyRedirectsToIdPAssertion('info', 'Redirecting to Identity Provider: No auth token found.'))
+    })
+
     it('if there is a wrong Authentication Token in cookie', () => {
       request(app)
         .get('/')
@@ -97,15 +103,24 @@ describe('Authentication Router', () => {
         .expect(NON_REDIRECTION_STATUS, () => expect(authenticatedUserMiddleware).to.have.been.called())
     })
 
+    it('redirect if there is no token in the body or query', () => {
+      request(app)
+        .post('/consume_token')
+        .send({ })
+        .expect(REDIRECTION_STATUS, correctlyRedirectsToIdPAssertion('info', 'Redirecting to Identity Provider: No auth token found.'))
+    })
+
     it('does not look for the token in cookies', () => {
       request(app)
         .get('/consume_token')
+        .set('cookie', `auth-token=${CORRENT_AUTH_TOKEN}`)
         .expect(REDIRECTION_STATUS, correctlyRedirectsToIdPAssertion('info', 'Redirecting to Identity Provider: No auth token found.'))
     })
 
     it('does not look for the token in headers', () => {
       request(app)
         .get('/consume_token')
+        .set('auth-token', CORRENT_AUTH_TOKEN)
         .expect(REDIRECTION_STATUS, correctlyRedirectsToIdPAssertion('info', 'Redirecting to Identity Provider: No auth token found.'))
     })
 
@@ -197,3 +212,4 @@ describe('Authentication Router', () => {
     })
   })
 })
+1

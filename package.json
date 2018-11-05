@@ -10,12 +10,12 @@
     "node": ">=8.2.1"
   },
   "scripts": {
-    "test": "env SECRET=mock_secret MODULE_IDENTITY_PROVIDER_URL=mock_idp PORT=0000 nyc --all --reporter=text --check-coverage --lines 90 mocha --recursive",
-    "cov": "env SECRET=mock_secret MODULE_IDENTITY_PROVIDER_URL=mock_idp PORT=0000 nyc --all --reporter=clover --check-coverage --lines 90 mocha --recursive"
+    "test": "env SECRET=mock_secret MODULE_IDENTITY_PROVIDER_URL=mock_idp PORT=0000 nyc --all --reporter=text --check-coverage --lines 90 mocha --recursive"
   },
   "dependencies": {
     "@first-lego-league/ms-correlation": "^0.0.5",
     "@first-lego-league/ms-logger": "^1.4.0",
+    "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.2.0"
