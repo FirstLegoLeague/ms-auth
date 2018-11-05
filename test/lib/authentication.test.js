@@ -6,15 +6,14 @@ const jwt = require('jsonwebtoken')
 const chai = require('chai')
 const chaiString = require('chai-string')
 const request = require('supertest')
-const rewire = require('rewire')
+const proxyquire = require('proxyquire')
 
 chai.use(chaiString)
 const expect = chai.expect
 
-const { LoggerMock } = require('../mocks/ms-logger.mock.js')
+const { LoggerMock, logger } = require('../mocks/ms-logger.mock.js')
 
-const authenticationModule = rewire('../../lib/authentication_router')
-authenticationModule.__set__('logger', LoggerMock)
+const authenticationModule = proxyquire('../../lib/authentication_router', { '@first-lego-league/ms-logger': LoggerMock })
 
 const REDIRECTION_STATUS = 302
 const NON_REDIRECTION_STATUS = 200
@@ -34,7 +33,7 @@ function correctlyRedirectsToIdPAssertion (logLevel, logMessage) {
     expect(response.statusCode).to.equal(REDIRECTION_STATUS)
     expect(response.headers['location']).to.startWith(process.env.MODULE_IDENTITY_PROVIDER_URL)
     if (logLevel) {
-      expect(LoggerMock[logLevel]).to.have.been.called.with(logMessage)
+      expect(logger[logLevel]).to.have.been.called.with(logMessage)
     }
   }
 }
@@ -212,4 +211,3 @@ describe('Authentication Router', () => {
     })
   })
 })
-1

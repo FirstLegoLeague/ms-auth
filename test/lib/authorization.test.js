@@ -6,15 +6,14 @@ const jwt = require('jsonwebtoken')
 const chai = require('chai')
 const chaiString = require('chai-string')
 const request = require('supertest')
-const rewire = require('rewire')
+const proxyquire = require('proxyquire')
 
 chai.use(chaiString)
 const expect = chai.expect
 
-const { LoggerMock } = require('../mocks/ms-logger.mock.js')
+const { LoggerMock, logger } = require('../mocks/ms-logger.mock.js')
 
-const authorizationModule = rewire('../../lib/authorization_router')
-authorizationModule.__set__('logger', LoggerMock)
+const authorizationModule = proxyquire('../../lib/authorization_router', { '@first-lego-league/ms-logger': LoggerMock })
 
 const AUTHORIZED_STATUS = 200
 const UNAUTHORIZED_STATUS = 403
@@ -32,7 +31,7 @@ function correctlyForbiddingAssertion (error, response) {
     throw error
   }
   expect(response.statusCode).to.equal(UNAUTHORIZED_STATUS)
-  expect(LoggerMock.info).to.have.been.called()
+  expect(logger.info).to.have.been.called()
 }
 
 describe('Authorization Router', () => {

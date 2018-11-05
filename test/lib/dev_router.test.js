@@ -15,8 +15,6 @@ const devRouterModule = require('../../lib/dev_router')
 const OK_STATUS = 200
 const DEVLEOPMENT_USERNAME = 'development'
 const FAKE_USERNAME = 'fakeUsername'
-const DEVLEOPMENT_TOKEN = jwt.sign({ username: DEVLEOPMENT_USERNAME }, process.env.SECRET)
-const FAKE_USERNAME_TOKEN = jwt.sign({ username: FAKE_USERNAME }, process.env.SECRET)
 
 const doneMiddleware = chai.spy((req, res) => res.sendStatus(OK_STATUS))
 
@@ -38,7 +36,7 @@ describe('Dev Router', () => {
           }
           const cookies = response.get('set-cookie').map(cookie => cookie.substring(0, cookie.indexOf(';')).split('='))
           const authCookieValue = cookies.find(([key, value]) => key === 'auth-token')[1]
-          expect(authCookieValue).to.equals(DEVLEOPMENT_TOKEN)
+          expect(jwt.verify(authCookieValue, process.env.SECRET).username).to.equals(DEVLEOPMENT_USERNAME)
           done()
         })
     })
@@ -75,7 +73,7 @@ describe('Dev Router', () => {
           }
           const cookies = response.get('set-cookie').map(cookie => cookie.substring(0, cookie.indexOf(';')).split('='))
           const authCookieValue = cookies.find(([key, value]) => key === 'auth-token')[1]
-          expect(authCookieValue).to.equals(FAKE_USERNAME_TOKEN)
+          expect(jwt.verify(authCookieValue, process.env.SECRET).username).to.equals(FAKE_USERNAME)
           done()
         })
     })
@@ -94,5 +92,4 @@ describe('Dev Router', () => {
         })
     })
   })
-
 })

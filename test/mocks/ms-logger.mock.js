@@ -5,7 +5,7 @@ const spies = require('chai-spies')
 
 chai.use(spies)
 
-const LoggerMock = {
+const logger = {
   debug: () => { },
   info: () => { },
   warn: () => { },
@@ -14,6 +14,12 @@ const LoggerMock = {
 }
 
 const loggerSandbox = chai.spy.sandbox()
-loggerSandbox.on(LoggerMock, ['debug', 'info', 'warn', 'error', 'fatal'])
+loggerSandbox.on(logger, ['debug', 'info', 'warn', 'error', 'fatal'])
 
-exports.LoggerMock = LoggerMock
+exports.logger = logger
+
+exports.LoggerMock = {
+  Logger: function Logger () {
+    return logger
+  }
+}
