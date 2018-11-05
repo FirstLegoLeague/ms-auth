@@ -37,7 +37,6 @@ function correctlyForbiddingAssertion (error, response) {
 
 describe('Authorization Router', () => {
   before(() => {
-    // app.use(authenticationRouter)
     app.use(authorizationModule.router([AUTHORIZED_USERNAME]))
     app.use(authorizedUserMiddleware)
   })
