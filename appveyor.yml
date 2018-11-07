@@ -18,5 +18,13 @@ test_script:
   - yarn lint
   - yarn test
 
+deploy_script:
+  - ps:
+      - npm version patch
+      - yarn publish
+    on:
+      branch: master
+
+
 # Don't actually build.
 build: off
