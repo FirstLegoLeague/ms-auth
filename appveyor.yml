@@ -19,9 +19,8 @@ test_script:
   - yarn test
 
 deploy_script:
-  - ps:
-      - npm version patch
-      - yarn publish
+  - ps: |
+      npm version patch && yarn publish
     on:
       branch: master
 
