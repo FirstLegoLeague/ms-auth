@@ -1,7 +1,7 @@
 'use strict'
 /* global describe it before */
 
-const express = require('express')
+const connect = require('connect')
 const jwt = require('jsonwebtoken')
 const chai = require('chai')
 const chaiString = require('chai-string')
@@ -13,7 +13,7 @@ const expect = chai.expect
 
 const { LoggerMock, logger } = require('../mocks/ms-logger.mock.js')
 
-const authorizationModule = proxyquire('../../lib/authorization_router', { '@first-lego-league/ms-logger': LoggerMock })
+const authorizationModule = proxyquire('../../lib/authorization_router', { './logger': LoggerMock })
 
 const AUTHORIZED_STATUS = 200
 const UNAUTHORIZED_STATUS = 403
@@ -22,9 +22,12 @@ const UNAUTHORIZED_USERNAME = 'unauthorized'
 const AUTHORIZED_AUTH_TOKEN = jwt.sign({ username: AUTHORIZED_USERNAME }, process.env.SECRET)
 const UNAUTHORIZED_AUTH_TOKEN = jwt.sign({ username: UNAUTHORIZED_USERNAME }, process.env.SECRET)
 
-const authorizedUserMiddleware = chai.spy((req, res) => res.sendStatus(AUTHORIZED_STATUS))
+const authorizedUserMiddleware = chai.spy((req, res) => {
+  res.statusCode = AUTHORIZED_STATUS
+  res.end()
+})
 
-const app = express()
+const app = connect()
 
 function correctlyForbiddingAssertion (error, response) {
   if (error) {
