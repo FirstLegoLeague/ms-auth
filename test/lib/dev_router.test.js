@@ -38,7 +38,8 @@ describe('Dev Router', () => {
         .get('/')
         .expect(OK_STATUS, (error, response) => {
           if (error) {
-            throw error
+            done(error)
+            return
           }
           const cookies = response.get('set-cookie').map(cookie => cookie.substring(0, cookie.indexOf(';')).split('='))
           const authCookieValue = cookies.find(([key]) => key === 'auth-token')[1]
@@ -52,7 +53,8 @@ describe('Dev Router', () => {
         .get('/')
         .expect(OK_STATUS, (error, response) => {
           if (error) {
-            throw error
+            done(error)
+            return
           }
           const cookies = response.get('set-cookie').map(cookie => cookie.substring(0, cookie.indexOf(';')).split('='))
           const usernameCookieValue = cookies.find(([key]) => key === 'username')[1]
@@ -75,7 +77,8 @@ describe('Dev Router', () => {
         .get('/')
         .expect(OK_STATUS, (error, response) => {
           if (error) {
-            throw error
+            done(error)
+            return
           }
           const cookies = response.get('set-cookie').map(cookie => cookie.substring(0, cookie.indexOf(';')).split('='))
           const authCookieValue = cookies.find(([key]) => key === 'auth-token')[1]
@@ -89,7 +92,8 @@ describe('Dev Router', () => {
         .get('/')
         .expect(OK_STATUS, (error, response) => {
           if (error) {
-            throw error
+            done(error)
+            return
           }
           const cookies = response.get('set-cookie').map(cookie => cookie.substring(0, cookie.indexOf(';')).split('='))
           const usernameCookieValue = cookies.find(([key]) => key === 'username')[1]

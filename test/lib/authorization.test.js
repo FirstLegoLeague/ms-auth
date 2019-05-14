@@ -29,12 +29,16 @@ const authorizedUserMiddleware = chai.spy((req, res) => {
 
 const app = connect()
 
-function correctlyForbiddingAssertion (error, response) {
-  if (error) {
-    throw error
+function correctlyForbiddingAssertion (done) {
+  return (error, response) => {
+    if (error) {
+      done(error)
+      return
+    }
+    expect(response.statusCode).to.equal(UNAUTHORIZED_STATUS)
+    expect(logger.info).to.have.been.called()
+    done()
   }
-  expect(response.statusCode).to.equal(UNAUTHORIZED_STATUS)
-  expect(logger.info).to.have.been.called()
 }
 
 describe('Authorization Router', () => {
@@ -43,40 +47,30 @@ describe('Authorization Router', () => {
     app.use(authorizedUserMiddleware)
   })
 
-  it('forbid if user is missing', () => {
+  it('forbid if user is missing', done => {
     request(app)
       .get('/')
-      .expect(UNAUTHORIZED_STATUS, correctlyForbiddingAssertion)
+      .expect(UNAUTHORIZED_STATUS, correctlyForbiddingAssertion(done))
   })
 
-  it('forbid if user is unauthorized', () => {
+  it('forbid if user is unauthorized', done => {
     request(app)
       .get('/')
       .set('auth-token', UNAUTHORIZED_AUTH_TOKEN)
-      .expect(UNAUTHORIZED_STATUS, correctlyForbiddingAssertion)
+      .expect(UNAUTHORIZED_STATUS, correctlyForbiddingAssertion(done))
   })
 
   it('does not forbid if user is authorized from cookie', done => {
     request(app)
       .get('/')
       .set('cookie', `auth-token=${AUTHORIZED_AUTH_TOKEN}`)
-      .expect(AUTHORIZED_STATUS, error => {
-        if (error) {
-          throw error
-        }
-        done()
-      })
+      .expect(AUTHORIZED_STATUS, done)
   })
 
   it('does not forbid if user is authorized from header', done => {
     request(app)
       .get('/')
       .set('auth-token', AUTHORIZED_AUTH_TOKEN)
-      .expect(AUTHORIZED_STATUS, error => {
-        if (error) {
-          throw error
-        }
-        done()
-      })
+      .expect(AUTHORIZED_STATUS, done)
   })
 })
