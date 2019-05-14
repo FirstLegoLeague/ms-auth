@@ -1,3 +1,5 @@
+'use strict'
+/* global describe it */
 
 const chai = require('chai')
 const proxyquire = require('proxyquire')
@@ -5,7 +7,6 @@ const proxyquire = require('proxyquire')
 const expect = chai.expect
 
 describe('Optional Logger', () => {
-
   it('returns ms-logger when package presents', () => {
     const MsLogger = {}
 

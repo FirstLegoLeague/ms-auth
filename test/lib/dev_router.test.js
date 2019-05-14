@@ -20,8 +20,8 @@ const DEVLEOPMENT_USERNAME = 'development'
 const FAKE_USERNAME = 'fakeUsername'
 
 const doneMiddleware = chai.spy((req, res) => {
-    res.statusCode = OK_STATUS
-    res.end()
+  res.statusCode = OK_STATUS
+  res.end()
 })
 
 describe('Dev Router', () => {

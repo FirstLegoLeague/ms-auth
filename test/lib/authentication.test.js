@@ -1,5 +1,6 @@
 'use strict'
 /* global describe it before */
+/* eslint-disable promise/no-callback-in-promise */
 
 const connect = require('connect')
 const jwt = require('jsonwebtoken')
@@ -159,7 +160,7 @@ describe('Authentication Router', () => {
         .get(`/consume_token?token=${CORRENT_AUTH_TOKEN}`)
         .expect(REDIRECTION_STATUS, (err, response) => {
           if (err) {
-            done(error)
+            done(err)
             return
           }
           const cookies = response.headers['set-cookie'].map(cookie => cookie.substring(0, cookie.indexOf(';')).split('='))
@@ -174,7 +175,7 @@ describe('Authentication Router', () => {
         .get(`/consume_token?token=${CORRENT_AUTH_TOKEN}`)
         .expect(REDIRECTION_STATUS, (err, response) => {
           if (err) {
-            done(error)
+            done(err)
             return
           }
           const cookies = response.get('set-cookie').map(cookie => cookie.substring(0, cookie.indexOf(';')).split('='))
@@ -210,7 +211,7 @@ describe('Authentication Router', () => {
             .set('cookie', [`auth-token=${CORRENT_AUTH_TOKEN}`, `username=${USERNAME}`])
             .expect(REDIRECTION_STATUS, (err, response) => {
               if (err) {
-                done(error)
+                done(err)
                 return
               }
 
@@ -231,7 +232,7 @@ describe('Authentication Router', () => {
             .set('cookie', [`auth-token=${CORRENT_AUTH_TOKEN}`, `username=${USERNAME}`])
             .expect(REDIRECTION_STATUS, (err, response) => {
               if (err) {
-                done(error)
+                done(err)
                 return
               }
 
