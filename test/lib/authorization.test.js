@@ -1,4 +1,3 @@
-'use strict'
 /* global describe it before */
 
 const express = require('express')
