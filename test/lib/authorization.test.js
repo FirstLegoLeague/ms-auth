@@ -13,7 +13,9 @@ const expect = chai.expect
 
 const { LoggerMock, logger } = require('../mocks/ms-logger.mock.js')
 
-const authorizationModule = proxyquire('../../lib/authorization_router', { './logger': LoggerMock })
+const authorizationModule = proxyquire('../../lib/authorization_router', {
+  '@first-lego-league/ms-logger': LoggerMock
+})
 
 const AUTHORIZED_STATUS = 200
 const UNAUTHORIZED_STATUS = 403

@@ -14,7 +14,9 @@ const expect = chai.expect
 
 const { LoggerMock, logger } = require('../mocks/ms-logger.mock.js')
 
-const authenticationModule = proxyquire('../../lib/authentication_router', { './logger': LoggerMock })
+const authenticationModule = proxyquire('../../lib/authentication_router', {
+  '@first-lego-league/ms-logger': LoggerMock
+})
 
 const REDIRECTION_STATUS = 302
 const NON_REDIRECTION_STATUS = 200
