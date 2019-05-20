@@ -1,4 +1,3 @@
-/* global describe it before */
 
 const express = require('express')
 const jwt = require('jsonwebtoken')

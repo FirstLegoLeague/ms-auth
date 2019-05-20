@@ -21,7 +21,7 @@
     "jsonwebtoken": "^8.2.0"
   },
   "devDependencies": {
-    "@first-lego-league/eslint-config": "^0.0.2",
+    "@first-lego-league/eslint-config": "^0.0.4",
     "@first-lego-league/ms-correlation": "^0.0.5",
     "@first-lego-league/ms-logger": "^1.4.0",
     "chai": "^4.2.0",

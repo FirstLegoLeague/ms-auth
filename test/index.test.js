@@ -1,4 +1,3 @@
-/* global describe it */
 
 const chai = require('chai')
 const chaiString = require('chai-string')
