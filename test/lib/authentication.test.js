@@ -29,6 +29,10 @@ const authenticatedUserMiddleware = chai.spy((req, res) => {
 
 const app = connect()
 
+function whenDone (asyncFunc) {
+  return done => callbackify(asyncFunc)(done)
+}
+
 function correctlyRedirectsToIdPAssertion (logLevel, logMessage, done) {
   return (error, response) => {
     if (error) {
@@ -192,7 +196,7 @@ describe('Authentication Router', () => {
         .get(`/consume_token?token=${CORRENT_AUTH_TOKEN}`)
     }
 
-    it('redirects to IDP', callbackify(() => login()
+    it('redirects to IDP', whenDone(() => login()
       .then(() => {
         return promisify(cb => request(app)
           .get('/logout')
@@ -202,12 +206,12 @@ describe('Authentication Router', () => {
       })
     ))
 
-    it('removes auth cookie', callbackify(() => login()
-      .then(() => promisify(cb => request(app)
+    it('removes auth cookie', whenDone(() => login()
+      .then(() => request(app)
         .get('/logout')
         .set('cookie', [`auth-token=${CORRENT_AUTH_TOKEN}`, `username=${USERNAME}`])
-        .expect(REDIRECTION_STATUS, cb)
-      ))
+        .expect(REDIRECTION_STATUS)
+      )
       .then(response => {
         const cookies = response.get('set-cookie').map(cookie => cookie.substring(0, cookie.indexOf(';')).split('='))
         const authCookieValue = cookies.find(([key]) => key === 'auth-token')[1]
@@ -215,12 +219,11 @@ describe('Authentication Router', () => {
       })
     ))
 
-    it('removes username cookie', callbackify(() => login()
-      .then(() => promisify(cb => request(app)
+    it('removes username cookie', whenDone(() => login()
+      .then(() => request(app)
         .get('/logout')
         .set('cookie', [`auth-token=${CORRENT_AUTH_TOKEN}`, `username=${USERNAME}`])
-        .expect(REDIRECTION_STATUS, cb)
-      ))
+        .expect(REDIRECTION_STATUS))
       .then(response => {
         const cookies = response.get('set-cookie').map(cookie => cookie.substring(0, cookie.indexOf(';')).split('='))
         const usernameCookieValue = cookies.find(([key]) => key === 'username')[1]
