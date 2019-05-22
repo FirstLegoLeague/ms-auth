@@ -3,17 +3,26 @@ extends: standard
 parserOptions:
   sourceType: script
 
+plugins:
+  - chai-expect
+  - chai-friendly
+
 rules:
   arrow-parens:
   - warn
   - as-needed
   - requireForBlockBody: false
   no-shadow: warn
+  no-unused-expressions: off
   no-var: warn
   object-curly-spacing: [ warn, always ]
   prefer-arrow-callback: warn
   prefer-const: warn
   strict: [ warn, global ]
+
+  chai-friendly/no-unused-expressions: error
+  chai-expect/missing-assertion: error
+  chai-expect/terminating-properties: warn
 
   import/newline-after-import: warn
   import/no-absolute-path: warn
