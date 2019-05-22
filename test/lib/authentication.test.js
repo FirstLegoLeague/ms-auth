@@ -5,6 +5,7 @@ const chai = require('chai')
 const chaiString = require('chai-string')
 const request = require('supertest')
 const proxyquire = require('proxyquire')
+const { callbackify, promisify } = require('util')
 
 chai.use(chaiString)
 const expect = chai.expect
@@ -191,57 +192,41 @@ describe('Authentication Router', () => {
         .get(`/consume_token?token=${CORRENT_AUTH_TOKEN}`)
     }
 
-    it('redirects to IDP', done => {
-      login()
-        .then(() => {
-          request(app)
-            .get('/logout')
-            .set('cookie', [`auth-token=${CORRENT_AUTH_TOKEN}`, `username=${USERNAME}`])
-            .expect(REDIRECTION_STATUS, correctlyRedirectsToIdPAssertion(null, null, done))
-        })
-        .catch(done)
-    })
+    it('redirects to IDP', callbackify(() => login()
+      .then(() => {
+        return promisify(cb => request(app)
+          .get('/logout')
+          .set('cookie', [`auth-token=${CORRENT_AUTH_TOKEN}`, `username=${USERNAME}`])
+          .expect(REDIRECTION_STATUS, correctlyRedirectsToIdPAssertion(null, null, cb))
+        )
+      })
+    ))
 
-    it('removes auth cookie', done => {
-      login()
-        .then(() => {
-          request(app)
-            .get('/logout')
-            .set('cookie', [`auth-token=${CORRENT_AUTH_TOKEN}`, `username=${USERNAME}`])
-            .expect(REDIRECTION_STATUS, (err, response) => {
-              if (err) {
-                done(err)
-                return
-              }
+    it('removes auth cookie', callbackify(() => login()
+      .then(() => promisify(cb => request(app)
+        .get('/logout')
+        .set('cookie', [`auth-token=${CORRENT_AUTH_TOKEN}`, `username=${USERNAME}`])
+        .expect(REDIRECTION_STATUS, cb)
+      ))
+      .then(response => {
+        const cookies = response.get('set-cookie').map(cookie => cookie.substring(0, cookie.indexOf(';')).split('='))
+        const authCookieValue = cookies.find(([key]) => key === 'auth-token')[1]
+        expect(authCookieValue).to.equal('')
+      })
+    ))
 
-              const cookies = response.get('set-cookie').map(cookie => cookie.substring(0, cookie.indexOf(';')).split('='))
-              const authCookieValue = cookies.find(([key]) => key === 'auth-token')[1]
-              expect(authCookieValue).to.equal('')
-              done()
-            })
-        })
-        .catch(done)
-    })
-
-    it('removes username cookie', done => {
-      login()
-        .then(() => {
-          request(app)
-            .get('/logout')
-            .set('cookie', [`auth-token=${CORRENT_AUTH_TOKEN}`, `username=${USERNAME}`])
-            .expect(REDIRECTION_STATUS, (err, response) => {
-              if (err) {
-                done(err)
-                return
-              }
-
-              const cookies = response.get('set-cookie').map(cookie => cookie.substring(0, cookie.indexOf(';')).split('='))
-              const usernameCookieValue = cookies.find(([key]) => key === 'username')[1]
-              expect(usernameCookieValue).to.equal('')
-              done()
-            })
-        })
-        .catch(done)
-    })
+    it('removes username cookie', callbackify(() => login()
+      .then(() => promisify(cb => request(app)
+        .get('/logout')
+        .set('cookie', [`auth-token=${CORRENT_AUTH_TOKEN}`, `username=${USERNAME}`])
+        .expect(REDIRECTION_STATUS, cb)
+      ))
+      .then(response => {
+        const cookies = response.get('set-cookie').map(cookie => cookie.substring(0, cookie.indexOf(';')).split('='))
+        const usernameCookieValue = cookies.find(([key]) => key === 'username')[1]
+        expect(usernameCookieValue).to.equal('')
+      })
+    )
+    )
   })
 })
