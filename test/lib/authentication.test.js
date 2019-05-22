@@ -1,6 +1,3 @@
-'use strict'
-/* global describe it before */
-/* eslint-disable promise/no-callback-in-promise */
 
 const connect = require('connect')
 const jwt = require('jsonwebtoken')
@@ -8,6 +5,7 @@ const chai = require('chai')
 const chaiString = require('chai-string')
 const request = require('supertest')
 const proxyquire = require('proxyquire')
+const { callbackify, promisify } = require('util')
 
 chai.use(chaiString)
 const expect = chai.expect
@@ -30,6 +28,10 @@ const authenticatedUserMiddleware = chai.spy((req, res) => {
 })
 
 const app = connect()
+
+function whenDone (asyncFunc) {
+  return done => callbackify(asyncFunc)(done)
+}
 
 function correctlyRedirectsToIdPAssertion (logLevel, logMessage, done) {
   return (error, response) => {
@@ -194,57 +196,40 @@ describe('Authentication Router', () => {
         .get(`/consume_token?token=${CORRENT_AUTH_TOKEN}`)
     }
 
-    it('redirects to IDP', done => {
-      login()
-        .then(() => {
-          request(app)
-            .get('/logout')
-            .set('cookie', [`auth-token=${CORRENT_AUTH_TOKEN}`, `username=${USERNAME}`])
-            .expect(REDIRECTION_STATUS, correctlyRedirectsToIdPAssertion(null, null, done))
-        })
-        .catch(done)
-    })
+    it('redirects to IDP', whenDone(() => login()
+      .then(() => {
+        return promisify(cb => request(app)
+          .get('/logout')
+          .set('cookie', [`auth-token=${CORRENT_AUTH_TOKEN}`, `username=${USERNAME}`])
+          .expect(REDIRECTION_STATUS, correctlyRedirectsToIdPAssertion(null, null, cb))
+        )
+      })
+    ))
 
-    it('removes auth cookie', done => {
-      login()
-        .then(() => {
-          request(app)
-            .get('/logout')
-            .set('cookie', [`auth-token=${CORRENT_AUTH_TOKEN}`, `username=${USERNAME}`])
-            .expect(REDIRECTION_STATUS, (err, response) => {
-              if (err) {
-                done(err)
-                return
-              }
+    it('removes auth cookie', whenDone(() => login()
+      .then(() => request(app)
+        .get('/logout')
+        .set('cookie', [`auth-token=${CORRENT_AUTH_TOKEN}`, `username=${USERNAME}`])
+        .expect(REDIRECTION_STATUS)
+      )
+      .then(response => {
+        const cookies = response.get('set-cookie').map(cookie => cookie.substring(0, cookie.indexOf(';')).split('='))
+        const authCookieValue = cookies.find(([key]) => key === 'auth-token')[1]
+        expect(authCookieValue).to.equal('')
+      })
+    ))
 
-              const cookies = response.get('set-cookie').map(cookie => cookie.substring(0, cookie.indexOf(';')).split('='))
-              const authCookieValue = cookies.find(([key]) => key === 'auth-token')[1]
-              expect(authCookieValue).to.equal('')
-              done()
-            })
-        })
-        .catch(done)
-    })
-
-    it('removes username cookie', done => {
-      login()
-        .then(() => {
-          request(app)
-            .get('/logout')
-            .set('cookie', [`auth-token=${CORRENT_AUTH_TOKEN}`, `username=${USERNAME}`])
-            .expect(REDIRECTION_STATUS, (err, response) => {
-              if (err) {
-                done(err)
-                return
-              }
-
-              const cookies = response.get('set-cookie').map(cookie => cookie.substring(0, cookie.indexOf(';')).split('='))
-              const usernameCookieValue = cookies.find(([key]) => key === 'username')[1]
-              expect(usernameCookieValue).to.equal('')
-              done()
-            })
-        })
-        .catch(done)
-    })
+    it('removes username cookie', whenDone(() => login()
+      .then(() => request(app)
+        .get('/logout')
+        .set('cookie', [`auth-token=${CORRENT_AUTH_TOKEN}`, `username=${USERNAME}`])
+        .expect(REDIRECTION_STATUS))
+      .then(response => {
+        const cookies = response.get('set-cookie').map(cookie => cookie.substring(0, cookie.indexOf(';')).split('='))
+        const usernameCookieValue = cookies.find(([key]) => key === 'username')[1]
+        expect(usernameCookieValue).to.equal('')
+      })
+    )
+    )
   })
 })

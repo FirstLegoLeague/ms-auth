@@ -1,5 +1,3 @@
-'use strict'
-/* global describe it before */
 
 const connect = require('connect')
 const jwt = require('jsonwebtoken')
