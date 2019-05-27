@@ -10,7 +10,7 @@
     "node": ">=8.2.1"
   },
   "scripts": {
-    "test": "cross-env SECRET=mock_secret MODULE_IDENTITY_PROVIDER_URL=mock_idp PORT=0000 nyc --all --reporter=text --check-coverage --lines 90 mocha --recursive",
+    "test": "cross-env SECRET=mock_secret MODULE_IDENTITY_PROVIDER_URL=mock_idp PORT=0000 nyc -n=lib/**/*.js --reporter=text --check-coverage --lines 90 mocha --recursive",
     "lint": "eslint --ext .js ./",
     "lint:fix": "eslint --ext .js --fix ./"
   },
