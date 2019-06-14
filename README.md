@@ -1,42 +1,40 @@
-# MS-Authentication
+## FIRST LEGO League Authentication & Authorization
+Authentication and Authorization library using the Identity Provider module based on the _FIRST_ LEGO League TMS [Module Standard](https://github.com/FirstLegoLeagueIL/architecture/blob/master/module-standard/v1.0-SNAPSHOT.md#log-messages).
 
-Authentication and Authorization library using the Identity Provider module based on the MS (Module Standard)
+### Usage
+The package has several routers for different tasks.
 
-## Usage
-
-First, install the package:  
-`npm install @first-lego-league/ms-auth`
-
-Or use yarn (prefered):  
-`yarn add @first-lego-league/ms-auth`
-
-After the installation, you just need import it and add it to use it as a router. everything route that fits this router will be protected by the IdP:  
+#### Authentication
+Meant only to identify the user. If the user has no identification, it redirects them to the Identity Provider service:
 ```javascript
+const Router = require('router')
 const { authenticationMiddleware } = require('@first-lego-league/ms-auth')
-app.use(authenticationMiddleware)
+
+const router = new Router()
+router.use(authenticationMiddleware)
 ```
-And for dev servers (Faking an authentication cookie):
+If you want a development version, which will not send you to the IdP, use:
 ```javascript
+const Router = require('router')
 const { authenticationDevMiddleware } = require('@first-lego-league/ms-auth')
-app.use(authenticationDevMiddleware)
+
+const router = new Router()
+router.use(authenticationDevMiddleware('username'))
 ```
-For authorization of some users, you can use:
+Where the username is the identification of the user, no matter what.
+
+### Autorization
+Meant to define which roles can access each route: 
 ```javascript
+const Router = require('router')
 const { authorizationMiddleware } = require('@first-lego-league/ms-auth')
-app.use(authorizationMiddleware(arrayOfAuthorizedUsers))
+
+const router = new Router()
+router.use('some_route', authorizationMiddleware(['roles', 'that', 'can', 'use', 'this', 'route']))
 ```
 
-## Development
-1. Fork this repository
-2. make some changes
-3. create a Pull Request
-4. Wait for a CR from the code owner
-5. make sure everything is well
-6. merge
-
-A few things to notice while developing:
-* Use `yarn` not `npm`
-* Follow javascript standard as described [here](https://standardjs.com/)
-* Keep the package lightweight and easy to use
-* Don't break API if not neccessary
-* Be creative and have fun
+### Contribution
+To contribute to this repository, simply create a PR and set one of the Code Owners to be a reviewer.
+Please notice the linting and UT, because they block merge.
+Keep the package lightweight and easy to use.
+Thank you for contributing!
