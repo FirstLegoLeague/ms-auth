@@ -5,7 +5,7 @@ const chai = require('chai')
 const chaiString = require('chai-string')
 const request = require('supertest')
 const proxyquire = require('proxyquire')
-const { callbackify, promisify } = require('util')
+const { promisify } = require('util')
 
 chai.use(chaiString)
 const expect = chai.expect
@@ -28,10 +28,6 @@ const authenticatedUserMiddleware = chai.spy((req, res) => {
 })
 
 const app = connect()
-
-function whenDone (asyncFunc) {
-  return done => callbackify(asyncFunc)(done)
-}
 
 function correctlyRedirectsToIdPAssertion (logLevel, logMessage, done) {
   return (error, response) => {
@@ -196,7 +192,7 @@ describe('Authentication Router', () => {
         .get(`/consume_token?token=${CORRENT_AUTH_TOKEN}`)
     }
 
-    it('redirects to IDP', whenDone(() => login()
+    it('redirects to IDP', () => login()
       .then(() => {
         return promisify(cb => request(app)
           .get('/logout')
@@ -204,9 +200,9 @@ describe('Authentication Router', () => {
           .expect(REDIRECTION_STATUS, correctlyRedirectsToIdPAssertion(null, null, cb))
         )
       })
-    ))
+    )
 
-    it('removes auth cookie', whenDone(() => login()
+    it('removes auth cookie', () => login()
       .then(() => request(app)
         .get('/logout')
         .set('cookie', [`auth-token=${CORRENT_AUTH_TOKEN}`, `username=${USERNAME}`])
@@ -217,9 +213,9 @@ describe('Authentication Router', () => {
         const authCookieValue = cookies.find(([key]) => key === 'auth-token')[1]
         expect(authCookieValue).to.equal('')
       })
-    ))
+    )
 
-    it('removes username cookie', whenDone(() => login()
+    it('removes username cookie', () => login()
       .then(() => request(app)
         .get('/logout')
         .set('cookie', [`auth-token=${CORRENT_AUTH_TOKEN}`, `username=${USERNAME}`])
@@ -229,7 +225,7 @@ describe('Authentication Router', () => {
         const usernameCookieValue = cookies.find(([key]) => key === 'username')[1]
         expect(usernameCookieValue).to.equal('')
       })
-    )
+
     )
   })
 })
